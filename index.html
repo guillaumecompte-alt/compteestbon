@@ -96,7 +96,7 @@ $('progressHelp').textContent=nextIdx<0?'Bravo ! Tous les niveaux actuels sont v
 $('numberInstruction').textContent=revealedCount>=level.numbers.length?'Tous les nombres sont affichés.':revealedCount===0?'Clique sur « Afficher les nombres » pour révéler les six nombres en même temps.':'Encore '+(level.numbers.length-revealedCount)+' nombre'+(level.numbers.length-revealedCount>1?'s':'')+' à dévoiler.';
 $('numberGrid').innerHTML=level.numbers.map((n,i)=>'<div class="number '+(i<revealedCount?'shown':'hidden')+'" aria-label="'+(i<revealedCount?'Nombre '+n:'Nombre masqué')+'">'+(i<revealedCount?n:'')+'</div>').join('');
 $('targetValue').textContent=targetShown?level.target:'???';$('targetValue').classList.toggle('masked',!targetShown);
-$('revealBtn').disabled=revealedCount>=level.numbers.length;$('revealBtn').textContent=revealedCount>=level.numbers.length?'Tous les nombres affichés':'Afficher un nombre ('+Math.min(revealedCount+1,level.numbers.length)+'/'+level.numbers.length+')';
+$('revealBtn').disabled=revealedCount>=level.numbers.length;$('revealBtn').textContent=revealedCount>=level.numbers.length?'Nombres affichés':'Afficher les nombres';
 $('targetBtn').disabled=revealedCount<level.numbers.length||targetShown;$('targetBtn').textContent=targetShown?'Cible affichée':'Afficher la cible';
 $('validateBtn').disabled=!targetShown||completed(c).includes(level.id);$('validateBtn').textContent=completed(c).includes(level.id)?'✓ Niveau déjà validé':'✓ Compte réussi — valider';
 }
