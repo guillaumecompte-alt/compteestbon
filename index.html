@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f7fb">
+<title>Le compte est bon — suivi des classes</title>
+<style>
+:root{--ink:#172033;--muted:#667085;--line:#e3e7ef;--paper:#fff;--bg:#f5f7fb;--blue:#4f46e5;--blue2:#4338ca;--green:#15803d;--orange:#ea580c;--shadow:0 14px 40px rgba(32,44,76,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 16px;font-weight:700;transition:.15s}button:focus-visible,input:focus-visible{outline:3px solid #a5b4fc;outline-offset:2px}
+.primary{background:var(--blue);color:white}.primary:hover{background:var(--blue2)}.secondary{background:#eef0ff;color:#3730a3}.quiet{background:#f1f3f8;color:#344054}.danger{background:#fff0ee;color:#b42318}.small{font-size:.88rem;padding:8px 11px}
+header{padding:22px max(20px,calc((100vw - 1120px)/2));background:#fff;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:12px}.logo{height:44px;width:44px;border-radius:14px;background:#e9eaff;color:#4338ca;display:grid;place-items:center;font-size:24px}.brand h1{font-size:1.2rem;margin:0}.brand p{color:var(--muted);margin:3px 0 0;font-size:.9rem}
+main{max-width:1120px;margin:28px auto;padding:0 20px 50px}.view{display:none}.view.active{display:block}.eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:.76rem;color:var(--blue);font-weight:800}.heading{font-size:clamp(1.65rem,4vw,2.3rem);margin:8px 0 9px;letter-spacing:-.04em}.sub{color:var(--muted);margin:0 0 24px;line-height:1.5}
+.layout{display:grid;grid-template-columns:330px 1fr;gap:22px}.panel,.class-card,.game-card{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}.panel h2{font-size:1.05rem;margin:0 0 16px}.field{display:flex;gap:8px;margin-bottom:12px}.field input{min-width:0;flex:1}.input{width:100%;border:1px solid #d0d5dd;border-radius:12px;padding:12px 13px;background:#fff;color:var(--ink)}.field label{flex:1}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px}.section-title h2{font-size:1.2rem;margin:0}.class-list{display:grid;gap:12px}.class-card{box-shadow:none;padding:18px;display:flex;align-items:center;justify-content:space-between;gap:14px}.class-name{font-weight:800;font-size:1.05rem}.meta{font-size:.88rem;color:var(--muted);margin-top:5px}.progress{height:7px;border-radius:99px;background:#eef0f5;margin-top:12px;overflow:hidden}.progress span{display:block;height:100%;background:#22a06b;border-radius:99px}.card-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.empty{padding:28px;border:1px dashed #cbd2e1;border-radius:16px;color:var(--muted);text-align:center;background:#fafbff}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:18px}.crumb{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:.92rem}.game-grid{display:grid;grid-template-columns: minmax(0,1.2fr) minmax(260px,.8fr);gap:20px}.game-card{padding:clamp(20px,4vw,34px)}.game-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.level{display:inline-flex;align-items:center;gap:7px;border-radius:99px;padding:7px 12px;background:#eef0ff;color:#3730a3;font-size:.86rem;font-weight:800}.level-dot{width:7px;height:7px;border-radius:100%;background:#6366f1}.counter{font-size:.86rem;color:var(--muted);font-weight:700}.game-title{font-size:1.6rem;margin:22px 0 6px;letter-spacing:-.03em}.instruction{color:var(--muted);margin:0 0 25px}
+.numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:25px 0}.number{display:grid;place-items:center;min-height:86px;border-radius:17px;background:#f4f5fa;border:1px solid #e5e7ef;font-size:clamp(1.7rem,4vw,2.5rem);font-weight:800;animation:appear .3s ease both}.number.hidden{color:transparent;background:#fafbff;border:1px dashed #d7dce7}.number.hidden::after{content:"?";color:#c0c6d4;font-size:1.5rem}.number.shown{background:#f0f2ff;color:#3730a3;border-color:#d9dcff}.target-box{background:#172033;color:white;border-radius:20px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px;margin:18px 0 20px}.target-label{font-size:.85rem;color:#c8cede;font-weight:600}.target-value{font-size:clamp(2.3rem,6vw,3.7rem);font-weight:900;letter-spacing:-.04em;line-height:1.15}.target-value.masked{letter-spacing:.12em;color:#aab4cb}.progressive-actions{display:flex;gap:10px;flex-wrap:wrap}.progressive-actions button{flex:1;min-width:160px}.game-controls{display:grid;gap:14px}.side-stat{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding:12px 0}.side-stat:last-child{border-bottom:0}.side-stat span{color:var(--muted)}.side-stat strong{text-align:right}.helper{font-size:.9rem;color:var(--muted);line-height:1.5}.status{display:inline-flex;border-radius:99px;padding:6px 9px;font-size:.8rem;font-weight:800;background:#e9f8ef;color:#166534}.footer-note{margin-top:18px;color:var(--muted);font-size:.83rem;line-height:1.5}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#172033;color:white;border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);display:none;z-index:10}.toast.show{display:block;animation:appear .2s ease}
+@keyframes appear{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:800px){.layout,.game-grid{grid-template-columns:1fr}.layout{gap:16px}header{padding:16px 20px}.class-card{align-items:flex-start;flex-direction:column}.card-actions{justify-content:flex-start}.numbers{gap:8px}.number{min-height:72px}.progressive-actions button{min-width:135px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo" aria-hidden="true">🧮</div><div><h1>Le compte est bon</h1><p>Ateliers de calcul · suivi par classe</p></div></div><button class="quiet small" id="homeBtn" hidden>← Mes classes</button></header>
+<main>
+<section class="view active" id="homeView">
+<div class="eyebrow">Espace enseignant</div><h2 class="heading">Retrouvons où chaque classe en est.</h2><p class="sub">Crée tes classes une fois, puis valide les comptes réussis au fil des séances. La progression est enregistrée sur cet appareil.</p>
+<div class="layout">
+<aside class="panel"><h2>Créer une classe</h2><form id="classForm"><label for="className" class="helper" style="display:block;margin-bottom:8px">Nom de la classe</label><div class="field"><input class="input" id="className" name="className" placeholder="Ex. CM1 A" maxlength="60" required><button class="primary" type="submit">Ajouter</button></div></form><p class="helper">Tu peux créer autant de classes que nécessaire. Chaque classe possède sa propre progression.</p></aside>
+<div><div class="section-title"><h2>Mes classes</h2><span class="counter" id="classCount">0 classe</span></div><div id="classList" class="class-list"></div></div>
+</div><p class="footer-note">Les données restent dans le stockage local de ce navigateur. Elles ne sont pas synchronisées entre plusieurs appareils ou navigateurs : pense à conserver une sauvegarde si tu changes de matériel.</p>
+</section>
+<section class="view" id="gameView">
+<div class="topline"><div class="crumb"><button class="quiet small" id="backBtn">← Classes</button><span>/</span><strong id="activeClassCrumb">Classe</strong></div><button class="quiet small" id="manageBtn">Gérer les niveaux</button></div>
+<div class="eyebrow">Séance de calcul mental</div><h2 class="heading" id="gameHeading">Le compte est bon</h2><p class="sub">Affiche les nombres un à un, puis dévoile la cible. Quand la classe a trouvé, valide pour enregistrer sa réussite et passer au suivant.</p>
+<div class="game-grid">
+<article class="game-card"><div class="game-top"><span class="level"><span class="level-dot"></span><span id="levelLabel">Niveau 1</span></span><span class="counter" id="levelCounter">1 / 3</span></div>
+<h3 class="game-title">Les nombres disponibles</h3><p class="instruction" id="numberInstruction">Clique sur « Afficher un nombre » pour commencer.</p><div class="numbers" id="numberGrid" aria-live="polite"></div>
+<div class="target-box"><div><div class="target-label">NOMBRE À ATTEINDRE</div><div class="target-value masked" id="targetValue">???</div></div><span aria-hidden="true" style="font-size:2rem">🎯</span></div>
+<div class="progressive-actions"><button class="primary" id="revealBtn">Afficher un nombre</button><button class="secondary" id="targetBtn" disabled>Afficher la cible</button></div>
+<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button id="validateBtn" class="primary" disabled>✓ Compte réussi — valider</button><button class="quiet" id="resetRevealBtn">Recommencer l’affichage</button></div>
+</article>
+<aside class="panel"><h2>Progression de la classe</h2><div class="side-stat"><span>Classe</span><strong id="sideClassName">—</strong></div><div class="side-stat"><span>Comptes validés</span><strong id="completedStat">0 / 3</strong></div><div class="side-stat"><span>À travailler ensuite</span><strong id="nextStat">Niveau 1</strong></div><div class="progress"><span id="classProgressBar" style="width:0%"></span></div><p class="helper" id="progressHelp" style="margin-top:18px">La validation est enregistrée automatiquement pour cette classe.</p><div style="margin-top:18px"><button class="secondary" id="jumpBtn" style="width:100%">Voir tous les niveaux</button></div></aside>
+</div></section>
+<section class="view" id="levelsView">
+<div class="topline"><div class="crumb"><button class="quiet small" id="levelsBackBtn">← Retour au compte</button><span>/</span><strong id="levelsClassCrumb">Classe</strong></div></div>
+<div class="eyebrow">Configuration</div><h2 class="heading">Les niveaux</h2><p class="sub">Les trois premiers niveaux sont préchargés. Tu pourras ajouter les suivants ici quand tu les auras préparés.</p>
+<div class="panel" style="margin-bottom:20px"><h2>Ajouter un niveau</h2><form id="levelForm">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+<label><span class="helper" style="display:block;margin-bottom:7px">Nom du niveau</span><input class="input" id="newLevelName" placeholder="Niveau 4" maxlength="60" required></label>
+<label><span class="helper" style="display:block;margin-bottom:7px">Nombres (séparés par des virgules)</span><input class="input" id="newLevelNumbers" placeholder="25, 5, 3, 1, 2, 8" required></label>
+<label><span class="helper" style="display:block;margin-bottom:7px">Cible</span><input class="input" id="newLevelTarget" type="number" min="0" step="1" placeholder="399" required></label>
+</div><button class="primary" type="submit" style="margin-top:14px">Ajouter ce niveau</button></form></div>
+<div id="levelsList" class="class-list"></div><p class="footer-note">Les niveaux ajoutés seront disponibles pour toutes les classes. Ajouter un niveau ne valide aucune réussite : chaque classe avance indépendamment.</p>
+</section>
+</main><div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+'use strict';
+const STORAGE_KEY='compte-est-bon-v1';
+const INITIAL_LEVELS=[
+{id:'n1',name:'Niveau 1',numbers:[25,5,3,1,2,8],target:399},
+{id:'n2',name:'Niveau 2',numbers:[50,3,7,9,8,7],target:578},
+{id:'n3',name:'Niveau 3',numbers:[25,2,5,3,10,8],target:980}
+];
+let data=loadData(),activeClassId=null,revealedCount=0,targetShown=false;
+const $=id=>document.getElementById(id);
+function loadData(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));if(d&&Array.isArray(d.classes)&&Array.isArray(d.levels))return d;}catch(e){}return {classes:[],levels:INITIAL_LEVELS.map(x=>({...x,numbers:[...x.numbers]}))};}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){toast("Impossible d’enregistrer les données dans ce navigateur.");}}
+function uid(){return 'c-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function toast(message){const t=$('toast');t.textContent=message;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600);}
+function currentClass(){return data.classes.find(c=>c.id===activeClassId)||null;}
+function completed(c){return c.completed||[];}
+function indexFor(c){const done=new Set(completed(c));const i=data.levels.findIndex(l=>!done.has(l.id));return i<0?Math.max(0,data.levels.length-1):i;}
+function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));$('homeBtn').hidden=id==='homeView';window.scrollTo({top:0,behavior:'smooth'});}
+function renderClasses(){
+$('classCount').textContent=data.classes.length+' classe'+(data.classes.length>1?'s':'');
+const container=$('classList');
+if(!data.classes.length){container.innerHTML='<div class="empty">Aucune classe pour le moment.<br>Ajoute une classe pour commencer.</div>';return;}
+container.innerHTML=data.classes.map(c=>{const done=completed(c).length,total=data.levels.length,pct=total?Math.min(100,done/total*100):0;return '<article class="class-card"><div style="flex:1;min-width:0"><div class="class-name">'+esc(c.name)+'</div><div class="meta">'+done+' / '+total+' compte'+(total>1?'s':'')+' validé'+(done>1?'s':'')+(done>=total&&total?' · Tous les niveaux réussis':'')+'</div><div class="progress"><span style="width:'+pct+'%"></span></div></div><div class="card-actions"><button class="primary small" data-open="'+c.id+'">'+(done>=total&&total?'Revoir':'Continuer')+' →</button><button class="quiet small" data-rename="'+c.id+'" aria-label="Renommer '+esc(c.name)+'">✎</button><button class="danger small" data-delete="'+c.id+'" aria-label="Supprimer '+esc(c.name)+'">×</button></div></article>';}).join('');
+container.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openClass(b.dataset.open));
+container.querySelectorAll('[data-rename]').forEach(b=>b.onclick=()=>renameClass(b.dataset.rename));
+container.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteClass(b.dataset.delete));
+}
+function openClass(id){activeClassId=id;const c=currentClass();if(!c)return;const idx=indexFor(c);revealedCount=0;targetShown=false;showView('gameView');renderGame(idx);}
+function renderGame(forcedIndex){
+const c=currentClass();if(!c)return;
+$('activeClassCrumb').textContent=c.name;$('sideClassName').textContent=c.name;$('gameHeading').textContent='Le compte est bon · '+c.name;
+const idx=typeof forcedIndex==='number'?forcedIndex:indexFor(c),level=data.levels[idx];if(!level){return;}
+$('levelLabel').textContent=level.name;$('levelCounter').textContent=(idx+1)+' / '+data.levels.length;
+$('completedStat').textContent=completed(c).length+' / '+data.levels.length;
+const nextIdx=data.levels.findIndex(l=>!completed(c).includes(l.id));$('nextStat').textContent=nextIdx<0?'Tout est réussi':data.levels[nextIdx].name;
+$('classProgressBar').style.width=(data.levels.length?completed(c).length/data.levels.length*100:0)+'%';
+$('progressHelp').textContent=nextIdx<0?'Bravo ! Tous les niveaux actuels sont validés pour cette classe.':'La prochaine validation sera enregistrée pour '+c.name+'.';
+$('numberInstruction').textContent=revealedCount>=level.numbers.length?'Tous les nombres sont affichés.':revealedCount===0?'Clique sur « Afficher un nombre » pour commencer.':'Encore '+(level.numbers.length-revealedCount)+' nombre'+(level.numbers.length-revealedCount>1?'s':'')+' à dévoiler.';
+$('numberGrid').innerHTML=level.numbers.map((n,i)=>'<div class="number '+(i<revealedCount?'shown':'hidden')+'" aria-label="'+(i<revealedCount?'Nombre '+n:'Nombre masqué')+'">'+(i<revealedCount?n:'')+'</div>').join('');
+$('targetValue').textContent=targetShown?level.target:'???';$('targetValue').classList.toggle('masked',!targetShown);
+$('revealBtn').disabled=revealedCount>=level.numbers.length;$('revealBtn').textContent=revealedCount>=level.numbers.length?'Tous les nombres affichés':'Afficher un nombre ('+Math.min(revealedCount+1,level.numbers.length)+'/'+level.numbers.length+')';
+$('targetBtn').disabled=revealedCount<level.numbers.length||targetShown;$('targetBtn').textContent=targetShown?'Cible affichée':'Afficher la cible';
+$('validateBtn').disabled=!targetShown||completed(c).includes(level.id);$('validateBtn').textContent=completed(c).includes(level.id)?'✓ Niveau déjà validé':'✓ Compte réussi — valider';
+}
+function renameClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;const n=prompt('Nouveau nom de la classe :',c.name);if(n&&n.trim()){c.name=n.trim();save();renderClasses();if(activeClassId===id)renderGame();}}
+function deleteClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;if(!confirm('Supprimer la classe « '+c.name+' » et sa progression ? Cette action est irréversible.'))return;data.classes=data.classes.filter(x=>x.id!==id);save();renderClasses();}
+function renderLevels(){
+$('levelsClassCrumb').textContent=currentClass()?.name||'Classe';
+$('levelsList').innerHTML=data.levels.map((l,i)=>{const doneCount=data.classes.filter(c=>completed(c).includes(l.id)).length;const isInitial=['n1','n2','n3'].includes(l.id);return '<article class="class-card"><div style="flex:1"><div class="class-name">'+esc(l.name)+' <span class="counter">· '+doneCount+'/'+data.classes.length+' classes</span></div><div class="meta">Nombres : '+l.numbers.map(esc).join(', ')+' · Cible : <strong>'+esc(l.target)+'</strong></div></div>'+(isInitial?'<span class="status">Préchargé</span>':'<button class="danger small" data-level-delete="'+l.id+'">Supprimer</button>')+'</article>';}).join('');
+$('levelsList').querySelectorAll('[data-level-delete]').forEach(b=>b.onclick=()=>deleteLevel(b.dataset.levelDelete));
+}
+function deleteLevel(id){const level=data.levels.find(l=>l.id===id);if(!level||['n1','n2','n3'].includes(id))return;if(!confirm('Supprimer '+level.name+' et son statut de validation pour toutes les classes ?'))return;data.levels=data.levels.filter(l=>l.id!==id);data.classes.forEach(c=>c.completed=(c.completed||[]).filter(x=>x!==id));save();renderLevels();renderClasses();renderGame();}
+$('classForm').addEventListener('submit',e=>{e.preventDefault();const name=$('className').value.trim();if(!name)return;if(data.classes.some(c=>c.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('Une classe porte déjà ce nom.');return;}const c={id:uid(),name,completed:[]};data.classes.push(c);save();$('className').value='';renderClasses();toast('Classe ajoutée : '+name);});
+$('revealBtn').onclick=()=>{const c=currentClass();if(!c)return;const level=data.levels[indexFor(c)];if(revealedCount<level.numbers.length)revealedCount++;renderGame();};
+$('targetBtn').onclick=()=>{targetShown=true;renderGame();};
+$('resetRevealBtn').onclick=()=>{revealedCount=0;targetShown=false;renderGame();};
+$('validateBtn').onclick=()=>{const c=currentClass();if(!c)return;const idx=indexFor(c),level=data.levels[idx];if(!targetShown||!level)return;if(!c.completed.includes(level.id))c.completed.push(level.id);save();toast('Réussite enregistrée pour '+c.name+' !');if(idx<data.levels.length-1){revealedCount=0;targetShown=false;renderGame(idx+1);}else{renderGame(idx);renderClasses();toast('Bravo ! Tous les niveaux actuels sont validés.');}renderClasses();};
+function backHome(){showView('homeView');renderClasses();}
+$('backBtn').onclick=backHome;$('homeBtn').onclick=backHome;
+$('manageBtn').onclick=()=>{renderLevels();showView('levelsView');};$('jumpBtn').onclick=()=>{renderLevels();showView('levelsView');};$('levelsBackBtn').onclick=()=>{showView('gameView');renderGame();};
+$('levelForm').addEventListener('submit',e=>{e.preventDefault();const name=$('newLevelName').value.trim(),numbersText=$('newLevelNumbers').value.trim(),target=Number($('newLevelTarget').value);const numbers=numbersText.split(/[,;\s]+/).filter(Boolean).map(Number);if(!name||numbers.length!==6||numbers.some(n=>!Number.isFinite(n)||n<=0||!Number.isInteger(n))||!Number.isInteger(target)||target<0){toast('Entre 6 nombres entiers positifs, puis une cible entière positive ou nulle.');return;}if(data.levels.some(l=>l.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('Ce nom de niveau existe déjà.');return;}data.levels.push({id:uid(),name,numbers,target});save();$('levelForm').reset();renderLevels();renderClasses();renderGame();toast(name+' a été ajouté.');});
+renderClasses();
+})();
+</script>
+</body>
+</html>
