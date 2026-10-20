@@ -20,10 +20,13 @@ Ouvre simplement `index.html` dans un navigateur récent.
 
 ## Publier avec GitHub Pages
 
-1. Ouvre les paramètres du dépôt : https://github.com/guillaumecompte-alt/compteestbon/settings/pages
-2. Dans **Build and deployment**, choisis **Deploy from a branch**.
-3. Sélectionne la branche `main` et le dossier `/(root)`, puis enregistre.
-4. Attends la fin du déploiement. L'adresse du site apparaîtra dans les paramètres GitHub Pages.
+Le workflow `.github/workflows/deploy-pages.yml` déploie automatiquement le site lors d'une mise à jour de la branche `main`. Une première activation manuelle est nécessaire :
+
+1. Ouvre [les paramètres GitHub Pages](https://github.com/guillaumecompte-alt/compteestbon/settings/pages).
+2. Dans **Build and deployment**, choisis **GitHub Actions** comme source.
+3. Enregistre si GitHub le demande.
+4. Ouvre [les exécutions Actions](https://github.com/guillaumecompte-alt/compteestbon/actions) et relance le workflow **Deploy static app to GitHub Pages**.
+5. Une fois le déploiement réussi, l'adresse publique est généralement `https://guillaumecompte-alt.github.io/compteestbon/`.
 
 ## À savoir sur les données
 
