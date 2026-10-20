@@ -68,11 +68,12 @@ const STORAGE_KEY='compte-est-bon-v1';
 const INITIAL_LEVELS=[
 {id:'n1',name:'Niveau 1',numbers:[25,5,3,1,2,8],target:399},
 {id:'n2',name:'Niveau 2',numbers:[50,3,7,9,8,7],target:578},
-{id:'n3',name:'Niveau 3',numbers:[25,2,5,3,10,8],target:980}
+{id:'n3',name:'Niveau 3',numbers:[25,2,5,3,10,8],target:980},
+{id:'n4',name:'Niveau 4',numbers:[100,7,2,9,3,5],target:737}
 ];
 let data=loadData(),activeClassId=null,revealedCount=0,targetShown=false;
 const $=id=>document.getElementById(id);
-function loadData(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));if(d&&Array.isArray(d.classes)&&Array.isArray(d.levels))return d;}catch(e){}return {classes:[],levels:INITIAL_LEVELS.map(x=>({...x,numbers:[...x.numbers]}))};}
+function loadData(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));if(d&&Array.isArray(d.classes)&&Array.isArray(d.levels)){const known=new Set(d.levels.map(l=>l.id));INITIAL_LEVELS.forEach(l=>{if(!known.has(l.id))d.levels.push({...l,numbers:[...l.numbers]});});return d;}}catch(e){}return {classes:[],levels:INITIAL_LEVELS.map(x=>({...x,numbers:[...x.numbers]}))};}
 function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){toast("Impossible d’enregistrer les données dans ce navigateur.");}}
 function uid(){return 'c-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
@@ -116,7 +117,7 @@ function renameClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;co
 function deleteClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;if(!confirm('Supprimer la classe « '+c.name+' » et sa progression ? Cette action est irréversible.'))return;data.classes=data.classes.filter(x=>x.id!==id);save();renderClasses();}
 function renderLevels(){
 $('levelsClassCrumb').textContent=currentClass()?.name||'Classe';
-$('levelsList').innerHTML=data.levels.map((l,i)=>{const doneCount=data.classes.filter(c=>completed(c).includes(l.id)).length;const isInitial=['n1','n2','n3'].includes(l.id);return '<article class="class-card"><div style="flex:1"><div class="class-name">'+esc(l.name)+' <span class="counter">· '+doneCount+'/'+data.classes.length+' classes</span></div><div class="meta">Nombres : '+l.numbers.map(esc).join(', ')+' · Cible : <strong>'+esc(l.target)+'</strong></div></div>'+(isInitial?'<span class="status">Préchargé</span>':'<button class="danger small" data-level-delete="'+l.id+'">Supprimer</button>')+'</article>';}).join('');
+$('levelsList').innerHTML=data.levels.map((l,i)=>{const doneCount=data.classes.filter(c=>completed(c).includes(l.id)).length;const isInitial=['n1','n2','n3','n4'].includes(l.id);return '<article class="class-card"><div style="flex:1"><div class="class-name">'+esc(l.name)+' <span class="counter">· '+doneCount+'/'+data.classes.length+' classes</span></div><div class="meta">Nombres : '+l.numbers.map(esc).join(', ')+' · Cible : <strong>'+esc(l.target)+'</strong></div></div>'+(isInitial?'<span class="status">Préchargé</span>':'<button class="danger small" data-level-delete="'+l.id+'">Supprimer</button>')+'</article>';}).join('');
 $('levelsList').querySelectorAll('[data-level-delete]').forEach(b=>b.onclick=()=>deleteLevel(b.dataset.levelDelete));
 }
 function deleteLevel(id){const level=data.levels.find(l=>l.id===id);if(!level||['n1','n2','n3'].includes(id))return;if(!confirm('Supprimer '+level.name+' et son statut de validation pour toutes les classes ?'))return;data.levels=data.levels.filter(l=>l.id!==id);data.classes.forEach(c=>c.completed=(c.completed||[]).filter(x=>x!==id));save();renderLevels();renderClasses();renderGame();}
