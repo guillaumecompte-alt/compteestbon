@@ -35,7 +35,7 @@ main{max-width:1120px;margin:28px auto;padding:0 20px 50px}.view{display:none}.v
 <div class="eyebrow">Séance de calcul mental</div><h2 class="heading" id="gameHeading">Le compte est bon</h2><p class="sub">Affiche les nombres un à un, puis dévoile la cible. Quand la classe a trouvé, valide pour enregistrer sa réussite et passer au suivant.</p>
 <div class="game-grid">
 <article class="game-card"><div class="game-top"><span class="level"><span class="level-dot"></span><span id="levelLabel">Niveau 1</span></span><span class="counter" id="levelCounter">1 / 3</span></div>
-<h3 class="game-title">Les nombres disponibles</h3><p class="instruction" id="numberInstruction">Clique sur « Afficher un nombre » pour commencer.</p><div class="numbers" id="numberGrid" aria-live="polite"></div>
+<h3 class="game-title">Les nombres disponibles</h3><p class="instruction" id="numberInstruction">Clique sur « Afficher les nombres » pour révéler les six nombres en même temps.</p><div class="numbers" id="numberGrid" aria-live="polite"></div>
 <div class="target-box"><div><div class="target-label">NOMBRE À ATTEINDRE</div><div class="target-value masked" id="targetValue">???</div></div><span aria-hidden="true" style="font-size:2rem">🎯</span></div>
 <div class="progressive-actions"><button class="primary" id="revealBtn">Afficher un nombre</button><button class="secondary" id="targetBtn" disabled>Afficher la cible</button></div>
 <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button id="validateBtn" class="primary" disabled>✓ Compte réussi — valider</button><button class="quiet" id="resetRevealBtn">Recommencer l’affichage</button></div>
@@ -93,7 +93,7 @@ $('completedStat').textContent=completed(c).length+' / '+data.levels.length;
 const nextIdx=data.levels.findIndex(l=>!completed(c).includes(l.id));$('nextStat').textContent=nextIdx<0?'Tout est réussi':data.levels[nextIdx].name;
 $('classProgressBar').style.width=(data.levels.length?completed(c).length/data.levels.length*100:0)+'%';
 $('progressHelp').textContent=nextIdx<0?'Bravo ! Tous les niveaux actuels sont validés pour cette classe.':'La prochaine validation sera enregistrée pour '+c.name+'.';
-$('numberInstruction').textContent=revealedCount>=level.numbers.length?'Tous les nombres sont affichés.':revealedCount===0?'Clique sur « Afficher un nombre » pour commencer.':'Encore '+(level.numbers.length-revealedCount)+' nombre'+(level.numbers.length-revealedCount>1?'s':'')+' à dévoiler.';
+$('numberInstruction').textContent=revealedCount>=level.numbers.length?'Tous les nombres sont affichés.':revealedCount===0?'Clique sur « Afficher les nombres » pour révéler les six nombres en même temps.':'Encore '+(level.numbers.length-revealedCount)+' nombre'+(level.numbers.length-revealedCount>1?'s':'')+' à dévoiler.';
 $('numberGrid').innerHTML=level.numbers.map((n,i)=>'<div class="number '+(i<revealedCount?'shown':'hidden')+'" aria-label="'+(i<revealedCount?'Nombre '+n:'Nombre masqué')+'">'+(i<revealedCount?n:'')+'</div>').join('');
 $('targetValue').textContent=targetShown?level.target:'???';$('targetValue').classList.toggle('masked',!targetShown);
 $('revealBtn').disabled=revealedCount>=level.numbers.length;$('revealBtn').textContent=revealedCount>=level.numbers.length?'Tous les nombres affichés':'Afficher un nombre ('+Math.min(revealedCount+1,level.numbers.length)+'/'+level.numbers.length+')';
@@ -109,7 +109,7 @@ $('levelsList').querySelectorAll('[data-level-delete]').forEach(b=>b.onclick=()=
 }
 function deleteLevel(id){const level=data.levels.find(l=>l.id===id);if(!level||['n1','n2','n3'].includes(id))return;if(!confirm('Supprimer '+level.name+' et son statut de validation pour toutes les classes ?'))return;data.levels=data.levels.filter(l=>l.id!==id);data.classes.forEach(c=>c.completed=(c.completed||[]).filter(x=>x!==id));save();renderLevels();renderClasses();renderGame();}
 $('classForm').addEventListener('submit',e=>{e.preventDefault();const name=$('className').value.trim();if(!name)return;if(data.classes.some(c=>c.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('Une classe porte déjà ce nom.');return;}const c={id:uid(),name,completed:[]};data.classes.push(c);save();$('className').value='';renderClasses();toast('Classe ajoutée : '+name);});
-$('revealBtn').onclick=()=>{const c=currentClass();if(!c)return;const level=data.levels[indexFor(c)];if(revealedCount<level.numbers.length)revealedCount++;renderGame();};
+$('revealBtn').onclick=()=>{const c=currentClass();if(!c)return;const level=data.levels[indexFor(c)];revealedCount=level.numbers.length;renderGame();};
 $('targetBtn').onclick=()=>{targetShown=true;renderGame();};
 $('resetRevealBtn').onclick=()=>{revealedCount=0;targetShown=false;renderGame();};
 $('validateBtn').onclick=()=>{const c=currentClass();if(!c)return;const idx=indexFor(c),level=data.levels[idx];if(!targetShown||!level)return;if(!c.completed.includes(level.id))c.completed.push(level.id);save();toast('Réussite enregistrée pour '+c.name+' !');if(idx<data.levels.length-1){revealedCount=0;targetShown=false;renderGame(idx+1);}else{renderGame(idx);renderClasses();toast('Bravo ! Tous les niveaux actuels sont validés.');}renderClasses();};
