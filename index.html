@@ -1,361 +1,227 @@
 <!doctype html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0b1020">
-<title>Le compte est bon · Outilothèque</title>
-<style>
-:root{
-  color-scheme:dark;
-  --ink:#f4f5ff;
-  --muted:#a1a9c4;
-  --line:rgba(164,176,220,.14);
-  --paper:rgba(20,27,48,.82);
-  --paper-strong:rgba(25,33,57,.96);
-  --bg:#0b1020;
-  --blue:#9586ff;
-  --blue2:#7b6ae6;
-  --green:#69d9c3;
-  --orange:#ffc17b;
-  --danger:#ff8995;
-  --shadow:0 18px 50px rgba(0,0,0,.23);
-}
-*{box-sizing:border-box}
-html{min-height:100%;scroll-behavior:smooth;background:var(--bg)}
-body{
-  margin:0;min-height:100vh;overflow-x:hidden;color:var(--ink);
-  background:
-    radial-gradient(ellipse at 50% -18%,rgba(91,77,187,.2),transparent 48%),
-    radial-gradient(ellipse at 0% 48%,rgba(111,89,255,.07),transparent 32rem),
-    radial-gradient(ellipse at 100% 76%,rgba(34,200,176,.055),transparent 30rem),
-    var(--bg);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  letter-spacing:-.01em;
-}
-body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(90px);opacity:.09}
-body::before{width:340px;height:340px;background:#6f59ff;left:-180px;top:280px}
-body::after{width:300px;height:300px;background:#22c8b0;right:-170px;top:600px;opacity:.06}
-a{color:inherit}
-button,input{font:inherit}
-button{cursor:pointer;border:1px solid transparent;border-radius:11px;padding:11px 16px;font-weight:750;transition:background .16s ease,border-color .16s ease,transform .16s ease,box-shadow .16s ease}
-button:hover:not(:disabled){transform:translateY(-1px)}
-button:disabled{opacity:.42;cursor:not-allowed;transform:none}
-button:focus-visible,input:focus-visible{outline:3px solid #a5b4fc;outline-offset:3px}
-.primary{background:linear-gradient(110deg,#9586ff,#7564e8);color:#fff;box-shadow:0 6px 22px rgba(111,91,229,.16)}
-.primary:hover:not(:disabled){background:linear-gradient(110deg,#a195ff,#8878f2);box-shadow:0 8px 26px rgba(111,91,229,.22)}
-.secondary{background:rgba(105,217,195,.1);border-color:rgba(105,217,195,.22);color:#9debdc}
-.secondary:hover:not(:disabled){background:rgba(105,217,195,.16);border-color:rgba(105,217,195,.35)}
-.quiet{background:rgba(174,185,226,.06);border-color:rgba(174,185,226,.13);color:#c0c8e2}
-.quiet:hover:not(:disabled){background:rgba(174,185,226,.11);border-color:rgba(174,185,226,.23)}
-.danger{background:rgba(255,137,149,.08);border-color:rgba(255,137,149,.19);color:#ffabb3}
-.danger:hover:not(:disabled){background:rgba(255,137,149,.15);border-color:rgba(255,137,149,.32)}
-.small{font-size:.86rem;padding:8px 11px}
-.topbar{
-  min-height:80px;border-bottom:1px solid rgba(174,185,226,.1);
-  display:flex;justify-content:space-between;align-items:center;gap:20px;
-  padding:12px clamp(20px,6vw,90px);background:rgba(9,14,29,.72);backdrop-filter:blur(20px)
-}
-.brand{display:flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:var(--ink)}
-.brand-mark{width:36px;height:36px;flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:4px;border-radius:11px;background:linear-gradient(140deg,#a89bff,#6957e8);box-shadow:0 4px 20px #7563ff33}
-.brand-mark span{background:#fff;border-radius:2px;opacity:.95}
-.brand-mark span:nth-child(2),.brand-mark span:nth-child(3){opacity:.62}
-.brand-copy{display:grid;gap:2px;min-width:0}
-.brand-context{font-size:9px;letter-spacing:.17em;font-weight:850;color:#aaa0ff;text-transform:uppercase}
-.brand-title{font-size:17px;font-weight:850;letter-spacing:-.035em;line-height:1.15}
-.brand-dot{color:var(--green)}
-.brand-subtitle{font-size:11px;color:#8f99b7;letter-spacing:0}
-.header-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}
-.hub-link{display:inline-flex;align-items:center;gap:8px;text-decoration:none;color:#c9c3ff;border:1px solid rgba(149,134,255,.24);background:rgba(123,106,230,.1);border-radius:10px;padding:9px 12px;font-size:11px;font-weight:800;transition:background .16s ease,border-color .16s ease}
-.hub-link:hover{background:rgba(123,106,230,.18);border-color:rgba(149,134,255,.4)}
-main{max-width:1190px;width:calc(100% - 48px);margin:0 auto;padding:34px 0 48px}
-.view{display:none;animation:fadeIn .22s ease both}
-.view.active{display:block}
-.eyebrow{display:flex;align-items:center;gap:10px;color:#aaa0ff;text-transform:uppercase;letter-spacing:.19em;font-size:10px;font-weight:850}
-.eyebrow::before{content:"";width:23px;height:1px;background:#9586ff}
-.heading{font-size:clamp(1.8rem,4vw,2.8rem);margin:10px 0 10px;line-height:1.08;letter-spacing:-.055em;font-weight:850}
-.sub{max-width:760px;color:var(--muted);margin:0 0 28px;line-height:1.7;font-size:14px}
-.layout{display:grid;grid-template-columns: minmax(280px,340px) minmax(0,1fr);gap:18px;align-items:start}
-.panel,.class-card,.game-card{background:linear-gradient(145deg,rgba(25,33,57,.94),rgba(15,21,39,.94));border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}
-.panel h2{font-size:1rem;letter-spacing:-.02em;margin:0 0 16px;font-weight:800}
-.field{display:flex;gap:8px;margin-bottom:12px}
-.field input{min-width:0;flex:1}
-.input{width:100%;border:1px solid rgba(166,178,222,.18);border-radius:11px;padding:12px 13px;background:rgba(10,16,32,.72);color:var(--ink);transition:border-color .16s ease,box-shadow .16s ease}
-.input::placeholder{color:#737e9f}
-.input:focus{outline:none;border-color:#8273ee;box-shadow:0 0 0 3px #8170ed1c}
-.field label{flex:1}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px}
-.section-title h2{font-size:1.13rem;margin:0;letter-spacing:-.035em}
-.counter{font-size:.8rem;color:#8993b1;font-weight:750;white-space:nowrap}
-.class-list{display:grid;gap:12px}
-.class-card{box-shadow:none;padding:17px 18px;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:border-color .16s ease,transform .16s ease}
-.class-card:hover{border-color:rgba(149,134,255,.3);transform:translateY(-1px)}
-.class-name{font-weight:820;font-size:1rem;overflow-wrap:anywhere}
-.meta{font-size:.83rem;color:#929dbb;margin-top:5px;line-height:1.5}
-.progress{height:7px;border-radius:99px;background:rgba(174,185,226,.1);margin-top:12px;overflow:hidden}
-.progress span{display:block;height:100%;background:linear-gradient(90deg,#9586ff,#69d9c3);border-radius:99px;transition:width .25s ease}
-.card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
-.empty{padding:28px;border:1px dashed rgba(164,176,220,.27);border-radius:15px;color:#929dbb;text-align:center;line-height:1.7;background:rgba(13,19,36,.45)}
-.topline{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.crumb{display:flex;align-items:center;gap:9px;color:#8993b1;font-size:.87rem}
-.crumb strong{color:#dfe2fb}
-.game-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:18px;align-items:start}
-.game-card{padding:clamp(20px,3vw,32px)}
-.game-top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.level{display:inline-flex;align-items:center;gap:8px;border-radius:99px;padding:7px 12px;background:rgba(149,134,255,.13);border:1px solid rgba(149,134,255,.2);color:#c9c2ff;font-size:.81rem;font-weight:850}
-.level-dot{width:7px;height:7px;border-radius:100%;background:#a89bff;box-shadow:0 0 10px #9586ff75}
-.game-title{font-size:1.4rem;margin:22px 0 6px;letter-spacing:-.04em}
-.instruction{color:var(--muted);font-size:.9rem;margin:0 0 22px;line-height:1.6}
-.numbers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px;margin:23px 0}
-.number{display:grid;place-items:center;min-height:84px;border-radius:15px;background:rgba(149,134,255,.13);border:1px solid rgba(149,134,255,.2);color:#dfdbff;font-size:clamp(1.7rem,4vw,2.45rem);font-weight:900;letter-spacing:-.055em;animation:appear .28s ease both}
-.number.hidden{color:transparent;background:rgba(10,16,32,.58);border:1px dashed rgba(164,176,220,.22)}
-.number.hidden::after{content:"?";color:#646f90;font-size:1.5rem}
-.number.shown{background:linear-gradient(145deg,rgba(149,134,255,.2),rgba(105,217,195,.07));color:#e3e0ff;border-color:rgba(149,134,255,.36);box-shadow:inset 0 1px rgba(255,255,255,.025)}
-.target-box{background:linear-gradient(120deg,#211b48,#17243d);border:1px solid rgba(149,134,255,.25);border-radius:18px;padding:20px 22px;display:flex;align-items:center;justify-content:space-between;gap:15px;margin:18px 0 20px;box-shadow:inset 0 1px rgba(255,255,255,.025)}
-.target-label{font-size:.75rem;color:#b5b0d8;font-weight:800;letter-spacing:.13em}
-.target-value{font-size:clamp(2.3rem,6vw,3.7rem);font-weight:950;letter-spacing:-.06em;line-height:1.15;color:#8be5d7}
-.target-value.masked{letter-spacing:.12em;color:#777f9c}
-.progressive-actions{display:flex;gap:10px;flex-wrap:wrap}
-.progressive-actions button{flex:1;min-width:160px}
-.game-controls{display:grid;gap:14px}
-.side-stat{display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line);padding:12px 0;font-size:.9rem}
-.side-stat:last-of-type{border-bottom:0}
-.side-stat span{color:#8e98b7}
-.side-stat strong{text-align:right;color:#eef0ff}
-.helper{font-size:.86rem;color:#939db9;line-height:1.65}
-.status{display:inline-flex;border-radius:99px;padding:6px 9px;font-size:.78rem;font-weight:850;background:rgba(105,217,195,.11);border:1px solid rgba(105,217,195,.22);color:#8be5d7}
-.footer-note{margin-top:18px;color:#7f8aa9;font-size:.8rem;line-height:1.65}
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#e8fcf7;color:#132d32;border:1px solid rgba(105,217,195,.3);border-radius:12px;padding:12px 18px;box-shadow:var(--shadow);display:none;z-index:1300;font-size:.88rem;font-weight:800;max-width:calc(100% - 28px)}
-.toast.show{display:block;animation:appear .2s ease}
-.app-footer{max-width:1190px;width:calc(100% - 48px);margin:0 auto;border-top:1px solid rgba(174,185,226,.1);padding:20px 0 25px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;color:#737e9c;font-size:10px}
-.app-footer a{color:#b6adff;text-decoration:none;font-weight:800}
-.app-footer a:hover{color:#e5e1ff}
-.app-footer span:last-child{letter-spacing:.09em;text-transform:uppercase;font-weight:800;font-size:9px;color:#687493}
-.projection-view{position:fixed;inset:0;z-index:1000;background:#0b1020;color:#f4f5ff;display:none;flex-direction:column;align-items:center;justify-content:center;padding:4vw;gap:4vh;overflow:auto}
-.projection-view.active{display:flex}
-.projection-exit{position:absolute;top:16px;right:16px}
-.projection-numbers{width:min(1200px,100%);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2vw}
-.projection-number{display:grid;place-items:center;min-height:18vh;border:2px solid rgba(149,134,255,.23);border-radius:20px;font-size:clamp(3rem,12vw,9rem);font-weight:900;background:linear-gradient(145deg,rgba(25,33,57,.97),rgba(15,21,39,.97));color:#dbd7ff;box-shadow:inset 0 1px rgba(255,255,255,.025)}
-.projection-target{display:flex;flex-direction:column;align-items:center;gap:8px}
-.projection-label{font-size:clamp(1rem,2.4vw,1.8rem);font-weight:850;letter-spacing:.13em;text-transform:uppercase;color:#8f99b7}
-.projection-value{font-size:clamp(4rem,16vw,12rem);font-weight:950;line-height:1;color:#69d9c3;letter-spacing:-.065em}
-body.projection-open{overflow:hidden}
-.solutions-overlay{position:fixed;inset:0;z-index:1200;background:rgba(5,8,18,.82);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:18px}
-.solutions-overlay.active{display:flex}
-.solutions-dialog{background:linear-gradient(145deg,#1a223e,#11182d);color:var(--ink);border:1px solid rgba(164,176,220,.18);width:min(1000px,100%);max-height:90vh;overflow:auto;border-radius:20px;padding:clamp(18px,3vw,30px);box-shadow:0 24px 80px rgba(0,0,0,.42)}
-.solutions-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:8px}
-.solutions-head h2{margin:0;font-size:1.4rem;letter-spacing:-.04em}
-.solutions-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:20px}
-.solution-card{border:1px solid rgba(164,176,220,.14);border-radius:14px;padding:14px;background:rgba(10,16,32,.48);min-width:0}
-.solution-card h3{margin:0 0 8px;font-size:1rem;color:#e8e7ff}
-.solution-target{font-weight:900;color:#8be5d7}
-.solution-expression{font-size:1rem;line-height:1.7;overflow-wrap:anywhere;color:#b8c1dc}
-@keyframes appear{from{opacity:.2;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:900px){.layout,.game-grid{grid-template-columns:1fr}.layout{gap:16px}.game-grid{gap:16px}}
-@media(max-width:800px){.topbar{padding:12px 22px}.class-card{align-items:flex-start;flex-direction:column}.card-actions{justify-content:flex-start}.numbers{gap:8px}.number{min-height:72px}.progressive-actions button{min-width:135px}.app-footer{width:calc(100% - 40px)}}
-@media(max-width:600px){
-  .topbar{min-height:70px;padding:10px 16px;gap:8px}.brand-mark{width:32px;height:32px}.brand-context{font-size:8px}.brand-title{font-size:15px}.brand-subtitle{font-size:10px}.header-actions{gap:6px}.hub-link{font-size:10px;padding:8px}
-  main{width:calc(100% - 32px);padding-top:25px}.heading{font-size:clamp(1.75rem,8vw,2.3rem)}.sub{font-size:13px;margin-bottom:22px}.panel,.class-card,.game-card{padding:17px;border-radius:16px}
-  .topline{align-items:flex-start}.topline>div:last-child{width:100%}.topline>div:last-child button{font-size:10px;padding:8px}
-  .numbers{gap:7px;margin:19px 0}.number{min-height:66px;border-radius:12px}.target-box{padding:17px;border-radius:15px}.progressive-actions button{min-width:0;flex-basis:calc(50% - 6px);font-size:12px;padding:11px 9px}
-  #validateBtn,#resetRevealBtn{font-size:12px}.solutions-grid{grid-template-columns:1fr}.solutions-dialog{max-height:94vh}.projection-number{min-height:14vh;border-radius:13px}.app-footer{width:calc(100% - 32px);flex-direction:column;align-items:flex-start}
-}
-@media(max-width:390px){.brand-subtitle{display:none}.hub-link{font-size:0;gap:0}.hub-link span{font-size:15px}.field{flex-wrap:wrap}.field .input{flex-basis:100%}.field button{width:100%}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition:none!important}}
-
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>Le compte est bon · Outilothèque</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header class="topbar">
-<a class="brand" href="https://outilotheque.fr/" aria-label="Retour à Outilothèque">
-  <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
-  <span class="brand-copy">
-    <span class="brand-context">OUTILOTHÈQUE · ÉDUCATION</span>
-    <span class="brand-title">Le compte est bon<span class="brand-dot">.</span></span>
-    <span class="brand-subtitle">Ateliers de calcul · suivi par classe</span>
-  </span>
-</a>
-<div class="header-actions">
-  <a class="hub-link" href="https://outilotheque.fr/" title="Retourner au catalogue"><span aria-hidden="true">↗</span> Outilothèque</a>
-  <button class="quiet small" id="homeBtn" hidden>← Mes classes</button>
-</div>
-</header>
-<main>
-<section class="view active" id="homeView">
-<div class="eyebrow">Espace enseignant</div><h2 class="heading">Retrouvons où chaque classe en est.</h2><p class="sub">Crée tes classes une fois, puis valide les comptes réussis au fil des séances. La progression est enregistrée sur cet appareil.</p>
-<div class="layout">
-<aside class="panel"><h2>Créer une classe</h2><form id="classForm"><label for="className" class="helper" style="display:block;margin-bottom:8px">Nom de la classe</label><div class="field"><input class="input" id="className" name="className" placeholder="Ex. CM1 A" maxlength="60" required><button class="primary" type="submit">Ajouter</button></div></form><p class="helper">Tu peux créer autant de classes que nécessaire. Chaque classe possède sa propre progression.</p></aside>
-<div><div class="section-title"><h2>Mes classes</h2><span class="counter" id="classCount">0 classe</span></div><div id="classList" class="class-list"></div></div>
-</div><p class="footer-note">Les données restent dans le stockage local de ce navigateur. Elles ne sont pas synchronisées entre plusieurs appareils ou navigateurs : pense à conserver une sauvegarde si tu changes de matériel.</p>
-</section>
-<section class="view" id="gameView">
-<div class="topline"><div class="crumb"><button class="quiet small" id="backBtn">← Classes</button><span>/</span><strong id="activeClassCrumb">Classe</strong></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="primary small" id="projectionBtn">⛶ Mode projection</button><button class="secondary small" id="solutionsBtn">Voir les solutions</button><button class="quiet small" id="manageBtn">Gérer les niveaux</button></div></div>
-<div class="eyebrow">Séance de calcul mental</div><h2 class="heading" id="gameHeading">Le compte est bon</h2><p class="sub">Affiche les nombres un à un, puis dévoile la cible. Quand la classe a trouvé, valide pour enregistrer sa réussite et passer au suivant.</p>
-<div class="game-grid">
-<article class="game-card"><div class="game-top"><span class="level"><span class="level-dot"></span><span id="levelLabel">Niveau 1</span></span><span class="counter" id="levelCounter">1 / 3</span></div>
-<h3 class="game-title">Les nombres disponibles</h3><p class="instruction" id="numberInstruction">Clique sur « Afficher les nombres » pour révéler les six nombres en même temps.</p><div class="numbers" id="numberGrid" aria-live="polite"></div>
-<div class="target-box"><div><div class="target-label">NOMBRE À ATTEINDRE</div><div class="target-value masked" id="targetValue">???</div></div><span aria-hidden="true" style="font-size:2rem">🎯</span></div>
-<div class="progressive-actions"><button class="primary" id="revealBtn">Afficher un nombre</button><button class="secondary" id="targetBtn" disabled>Afficher la cible</button></div>
-<div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap"><button id="validateBtn" class="primary" disabled>✓ Compte réussi — valider</button><button class="quiet" id="resetRevealBtn">Recommencer l’affichage</button></div>
-</article>
-<aside class="panel"><h2>Progression de la classe</h2><div class="side-stat"><span>Classe</span><strong id="sideClassName">—</strong></div><div class="side-stat"><span>Comptes validés</span><strong id="completedStat">0 / 3</strong></div><div class="side-stat"><span>À travailler ensuite</span><strong id="nextStat">Niveau 1</strong></div><div class="progress"><span id="classProgressBar" style="width:0%"></span></div><p class="helper" id="progressHelp" style="margin-top:18px">La validation est enregistrée automatiquement pour cette classe.</p><div style="margin-top:18px"><button class="secondary" id="jumpBtn" style="width:100%">Voir tous les niveaux</button></div></aside>
-</div></section>
-<section class="view" id="levelsView">
-<div class="topline"><div class="crumb"><button class="quiet small" id="levelsBackBtn">← Retour au compte</button><span>/</span><strong id="levelsClassCrumb">Classe</strong></div></div>
-<div class="eyebrow">Configuration</div><h2 class="heading">Les niveaux</h2><p class="sub">Les trois premiers niveaux sont préchargés. Tu pourras ajouter les suivants ici quand tu les auras préparés.</p>
-<div class="panel" style="margin-bottom:20px"><h2>Ajouter un niveau</h2><form id="levelForm">
-<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
-<label><span class="helper" style="display:block;margin-bottom:7px">Nom du niveau</span><input class="input" id="newLevelName" placeholder="Niveau 4" maxlength="60" required></label>
-<label><span class="helper" style="display:block;margin-bottom:7px">Nombres (séparés par des virgules)</span><input class="input" id="newLevelNumbers" placeholder="25, 5, 3, 1, 2, 8" required></label>
-<label><span class="helper" style="display:block;margin-bottom:7px">Cible</span><input class="input" id="newLevelTarget" type="number" min="0" step="1" placeholder="399" required></label>
-</div><button class="primary" type="submit" style="margin-top:14px">Ajouter ce niveau</button></form></div>
-<div id="levelsList" class="class-list"></div><p class="footer-note">Les niveaux ajoutés seront disponibles pour toutes les classes. Ajouter un niveau ne valide aucune réussite : chaque classe avance indépendamment.</p>
-</section>
-</main><footer class="app-footer"><a href="https://outilotheque.fr/">← Retour à Outilothèque</a><span>Le compte est bon · suivi des classes</span><span>Un outil pour apprendre autrement</span></footer><section class="projection-view" id="projectionView" aria-label="Vue de projection"><button class="projection-exit" id="projectionExit">✕ Quitter la projection</button><div class="projection-numbers" id="projectionNumbers"></div><div class="projection-target"><div class="projection-label">Nombre à atteindre</div><div class="projection-value" id="projectionTarget">???</div></div></section><div class="solutions-overlay" id="solutionsOverlay" role="dialog" aria-modal="true" aria-labelledby="solutionsTitle"><div class="solutions-dialog"><div class="solutions-head"><h2 id="solutionsTitle">Solutions des 36 comptes est bon</h2><button class="quiet small" id="solutionsClose">✕ Fermer</button></div><p class="helper">Chaque calcul utilise les six nombres du niveau exactement une fois.</p><div class="solutions-grid" id="solutionsGrid"></div></div></div><div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script>
-(function(){
-'use strict';
-const STORAGE_KEY='compte-est-bon-v1';
-const INITIAL_LEVELS=[
-{id:'n1',name:'Niveau 1',numbers:[25,5,3,1,2,8],target:399},
-{id:'n2',name:'Niveau 2',numbers:[50,3,7,9,8,7],target:578},
-{id:'n3',name:'Niveau 3',numbers:[25,2,5,3,10,8],target:980},
-{id:'n4',name:'Niveau 4',numbers:[100,7,2,9,3,5],target:737},
-{id:'n5',name:'Niveau 5',numbers:[50,4,3,6,10,5],target:606},
-{id:'n6',name:'Niveau 6',numbers:[100,5,4,1,3,5],target:111},
-{id:'n7',name:'Niveau 7',numbers:[25,4,6,8,8,2],target:268},
-{id:'n8',name:'Niveau 8',numbers:[100,4,6,1,1,2],target:998},
-{id:'n9',name:'Niveau 9',numbers:[50,4,6,10,3,3],target:316},
-{id:'n10',name:'Niveau 10',numbers:[100,3,9,10,5,4],target:700},
-{id:'n11',name:'Niveau 11',numbers:[10,1,2,4,9,10],target:609},
-{id:'n12',name:'Niveau 12',numbers:[2,25,50,4,5,6],target:129},
-{id:'n13',name:'Niveau 13',numbers:[75,1,7,4,7,3],target:524},
-{id:'n14',name:'Niveau 14',numbers:[75,4,9,8,5,10],target:602},
-{id:'n15',name:'Niveau 15',numbers:[50,1,4,10,8,9],target:443},
-{id:'n16',name:'Niveau 16',numbers:[100,2,75,3,1,10],target:888},
-{id:'n17',name:'Niveau 17',numbers:[100,5,6,3,1,10],target:635},
-{id:'n18',name:'Niveau 18',numbers:[50,1,9,3,2,10],target:446},
-{id:'n19',name:'Niveau 19',numbers:[75,1,9,3,100,10],target:312},
-{id:'n20',name:'Niveau 20',numbers:[25,2,75,1,100,10],target:262},
-{id:'n21',name:'Niveau 21',numbers:[50,2,6,1,9,5],target:263},
-{id:'n22',name:'Niveau 22',numbers:[75,2,10,8,1,25],target:731},
-{id:'n23',name:'Niveau 23',numbers:[100,7,50,9,3,25],target:991},
-{id:'n24',name:'Niveau 24',numbers:[25,3,4,10,6,5],target:689},
-{id:'n25',name:'Niveau 25',numbers:[50,8,4,3,7,5],target:181},
-{id:'n26',name:'Niveau 26',numbers:[75,8,1,6,7,5],target:325},
-{id:'n27',name:'Niveau 27',numbers:[50,8,10,6,7,5],target:372},
-{id:'n28',name:'Niveau 28',numbers:[100,4,4,5,4,6],target:918},
-{id:'n29',name:'Niveau 29',numbers:[75,8,4,3,2,3],target:122},
-{id:'n30',name:'Niveau 30',numbers:[100,8,4,50,1,5],target:798},
-{id:'n31',name:'Niveau 31',numbers:[100,8,10,7,2,5],target:290},
-{id:'n32',name:'Niveau 32',numbers:[50,7,10,9,6,5],target:967},
-{id:'n33',name:'Niveau 33',numbers:[75,3,2,8,4,9],target:571},
-{id:'n34',name:'Niveau 34',numbers:[75,4,2,9,10,3],target:782},
-{id:'n35',name:'Niveau 35',numbers:[100,10,2,75,8,1],target:148},
-{id:'n36',name:'Niveau 36',numbers:[100,3,8,50,4,25],target:848}
-];
-let data=loadData(),activeClassId=null,revealedCount=0,targetShown=false;
-const $=id=>document.getElementById(id);
-function loadData(){try{const d=JSON.parse(localStorage.getItem(STORAGE_KEY));if(d&&Array.isArray(d.classes)&&Array.isArray(d.levels)){if((d.schemaVersion||1)<2){const byId=new Map(d.levels.map(l=>[l.id,l]));['n11','n10','n9','n8'].forEach(id=>{const l=byId.get(id);if(l){const num=Number(id.slice(1));l.id='n'+(num+1);l.name='Niveau '+(num+1);}});d.classes.forEach(cl=>{cl.completed=(cl.completed||[]).map(id=>/^n(8|9|10|11)$/.test(id)?'n'+(Number(id.slice(1))+1):id);});d.levels.push({...INITIAL_LEVELS.find(l=>l.id==='n8'),numbers:[100,4,6,1,1,2]});d.schemaVersion=2;}const known=new Set(d.levels.map(l=>l.id));INITIAL_LEVELS.forEach(l=>{if(!known.has(l.id))d.levels.push({...l,numbers:[...l.numbers]});});d.levels.sort((a,b)=>Number(a.id.slice(1))-Number(b.id.slice(1)));return d;}}catch(e){}return {schemaVersion:2,classes:[],levels:INITIAL_LEVELS.map(x=>({...x,numbers:[...x.numbers]}))};}
-function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(e){toast("Impossible d’enregistrer les données dans ce navigateur.");}}
-function uid(){return 'c-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);}
-function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function toast(message){const t=$('toast');t.textContent=message;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2600);}
-function currentClass(){return data.classes.find(c=>c.id===activeClassId)||null;}
-function completed(c){return c.completed||[];}
-function indexFor(c){const done=new Set(completed(c));const i=data.levels.findIndex(l=>!done.has(l.id));return i<0?Math.max(0,data.levels.length-1):i;}
-function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));$('homeBtn').hidden=id==='homeView';window.scrollTo({top:0,behavior:'smooth'});}
-function renderClasses(){
-$('classCount').textContent=data.classes.length+' classe'+(data.classes.length>1?'s':'');
-const container=$('classList');
-if(!data.classes.length){container.innerHTML='<div class="empty">Aucune classe pour le moment.<br>Ajoute une classe pour commencer.</div>';return;}
-container.innerHTML=data.classes.map(c=>{const done=completed(c).length,total=data.levels.length,pct=total?Math.min(100,done/total*100):0;return '<article class="class-card"><div style="flex:1;min-width:0"><div class="class-name">'+esc(c.name)+'</div><div class="meta">'+done+' / '+total+' compte'+(total>1?'s':'')+' validé'+(done>1?'s':'')+(done>=total&&total?' · Tous les niveaux réussis':'')+'</div><div class="progress"><span style="width:'+pct+'%"></span></div></div><div class="card-actions"><button class="primary small" data-open="'+c.id+'">'+(done>=total&&total?'Revoir':'Continuer')+' →</button><button class="quiet small" data-rename="'+c.id+'" aria-label="Renommer '+esc(c.name)+'">✎</button><button class="danger small" data-delete="'+c.id+'" aria-label="Supprimer '+esc(c.name)+'">×</button></div></article>';}).join('');
-container.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>openClass(b.dataset.open));
-container.querySelectorAll('[data-rename]').forEach(b=>b.onclick=()=>renameClass(b.dataset.rename));
-container.querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>deleteClass(b.dataset.delete));
-}
-function openClass(id){activeClassId=id;const c=currentClass();if(!c)return;const idx=indexFor(c);revealedCount=0;targetShown=false;showView('gameView');renderGame(idx);}
-function renderGame(forcedIndex){
-const c=currentClass();if(!c)return;
-$('activeClassCrumb').textContent=c.name;$('sideClassName').textContent=c.name;$('gameHeading').textContent='Le compte est bon · '+c.name;
-const idx=typeof forcedIndex==='number'?forcedIndex:indexFor(c),level=data.levels[idx];if(!level){return;}
-$('levelLabel').textContent=level.name;$('levelCounter').textContent=(idx+1)+' / '+data.levels.length;
-$('completedStat').textContent=completed(c).length+' / '+data.levels.length;
-const nextIdx=data.levels.findIndex(l=>!completed(c).includes(l.id));$('nextStat').textContent=nextIdx<0?'Tout est réussi':data.levels[nextIdx].name;
-$('classProgressBar').style.width=(data.levels.length?completed(c).length/data.levels.length*100:0)+'%';
-$('progressHelp').textContent=nextIdx<0?'Bravo ! Tous les niveaux actuels sont validés pour cette classe.':'La prochaine validation sera enregistrée pour '+c.name+'.';
-$('numberInstruction').textContent=revealedCount>=level.numbers.length?'Tous les nombres sont affichés.':revealedCount===0?'Clique sur « Afficher les nombres » pour révéler les six nombres en même temps.':'Encore '+(level.numbers.length-revealedCount)+' nombre'+(level.numbers.length-revealedCount>1?'s':'')+' à dévoiler.';
-$('numberGrid').innerHTML=level.numbers.map((n,i)=>'<div class="number '+(i<revealedCount?'shown':'hidden')+'" aria-label="'+(i<revealedCount?'Nombre '+n:'Nombre masqué')+'">'+(i<revealedCount?n:'')+'</div>').join('');
-$('targetValue').textContent=targetShown?level.target:'???';$('targetValue').classList.toggle('masked',!targetShown);
-$('revealBtn').disabled=revealedCount>=level.numbers.length;$('revealBtn').textContent=revealedCount>=level.numbers.length?'Nombres affichés':'Afficher les nombres';
-$('targetBtn').disabled=revealedCount<level.numbers.length||targetShown;$('targetBtn').textContent=targetShown?'Cible affichée':'Afficher la cible';
-$('validateBtn').disabled=!targetShown||completed(c).includes(level.id);$('validateBtn').textContent=completed(c).includes(level.id)?'✓ Niveau déjà validé':'✓ Compte réussi — valider';
-renderProjection(level);
-}
-function renderProjection(level){$('projectionNumbers').innerHTML=level.numbers.map((n,i)=>'<div class="projection-number">'+(i<revealedCount?n:'?')+'</div>').join('');$('projectionTarget').textContent=targetShown?level.target:'???';}
-function openProjection(){const c=currentClass();if(!c)return;const level=data.levels[indexFor(c)];if(!level)return;renderProjection(level);$('projectionView').classList.add('active');document.body.classList.add('projection-open');if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
-function closeProjection(){$('projectionView').classList.remove('active');document.body.classList.remove('projection-open');if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});}
 
-const SOLUTIONS=[
-{level:1,target:399,expression:'3 × (2 − 1) × (25 × 5 + 8) = 399'},
-{level:2,target:578,expression:'50 × (3 + 9) − 7 − 8 − 7 = 578'},
-{level:3,target:980,expression:'5 × (2 + 25 × 8) − 3 × 10 = 980'},
-{level:4,target:737,expression:'(2 + 9) + 7 × (100 + 3) + 5 = 737'},
-{level:5,target:606,expression:'50 × (3 + 10) − 4 × (6 + 5) = 606'},
-{level:6,target:111,expression:'(100 + 5 + 4) × 1 − 3 + 5 = 111'},
-{level:7,target:268,expression:'25 × (4 + 6) + 8 + 8 + 2 = 268'},
-{level:8,target:998,expression:'100 × (4 + 6) + 1 − 1 − 2 = 998'},
-{level:9,target:316,expression:'4 × (6 × (50 − 10) − 3) ÷ 3 = 316'},
-{level:10,target:700,expression:'9 + 100 × (10 − 3) − 5 − 4 = 700'},
-{level:11,target:609,expression:'1 × 9 + 10 × (2 + 4) × 10 = 609'},
-{level:12,target:129,expression:'(50 − (2 + 25) + 4) × 5 − 6 = 129'},
-{level:13,target:524,expression:'(75 + 1) × 7 − 4 − 7 + 3 = 524'},
-{level:14,target:602,expression:'75 × 8 − (4 + 9) + 5 + 10 = 602'},
-{level:15,target:443,expression:'(50 × 1 − 4) × 10 − 8 − 9 = 443'},
-{level:16,target:888,expression:'100 × 10 − (75 × 3 − 1) ÷ 2 = 888'},
-{level:17,target:635,expression:'(5 + 100 × 6) × 1 + 3 × 10 = 635'},
-{level:18,target:446,expression:'(50 − 1) × 9 − 3 − 2 + 10 = 446'},
-{level:19,target:312,expression:'(75 − 1) × 9 ÷ 3 + 100 − 10 = 312'},
-{level:20,target:262,expression:'75 − 25 + 2 × (1 + 100) + 10 = 262'},
-{level:21,target:263,expression:'50 × (6 − 1) + 2 × 9 − 5 = 263'},
-{level:22,target:731,expression:'(75 × 10 − 2 + 8) × 1 − 25 = 731'},
-{level:23,target:991,expression:'50 + (100 + 7) × 9 + 3 − 25 = 991'},
-{level:24,target:689,expression:'25 × 4 × (10 − 3) − 6 − 5 = 689'},
-{level:25,target:181,expression:'8 × (4 + 50 × 3) ÷ 7 + 5 = 181'},
-{level:26,target:325,expression:'(75 − 8 − 1 + 6 − 7) × 5 = 325'},
-{level:27,target:372,expression:'50 × 8 − 10 − 6 − 7 − 5 = 372'},
-{level:28,target:918,expression:'(5 + 4) × (100 + 4 + 4 − 6) = 918'},
-{level:29,target:122,expression:'75 + 4 + 8 × (3 + 2) + 3 = 122'},
-{level:30,target:798,expression:'(50 − 8) × (100 − 4 − 1) ÷ 5 = 798'},
-{level:31,target:290,expression:'(7 + (100 − 8 + 10) ÷ 2) × 5 = 290'},
-{level:32,target:967,expression:'7 + 50 × (10 × 9 + 6) ÷ 5 = 967'},
-{level:33,target:571,expression:'(3 + 75 × 2 − 8) × 4 − 9 = 571'},
-{level:34,target:782,expression:'75 × (2 + 9) − 4 × 10 − 3 = 782'},
-{level:35,target:148,expression:'100 − 10 × 2 + 75 − 8 + 1 = 148'},
-{level:36,target:848,expression:'100 × (3 + 50) × (8 − 4) ÷ 25 = 848'}
-];
-function openSolutions(){$('solutionsGrid').innerHTML=SOLUTIONS.map(s=>'<article class="solution-card"><h3>Niveau '+s.level+' · <span class="solution-target">'+s.target+'</span></h3><div class="solution-expression">'+s.expression+'</div></article>').join('');$('solutionsOverlay').classList.add('active');}
-function closeSolutions(){$('solutionsOverlay').classList.remove('active');}
-function renameClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;const n=prompt('Nouveau nom de la classe :',c.name);if(n&&n.trim()){c.name=n.trim();save();renderClasses();if(activeClassId===id)renderGame();}}
-function deleteClass(id){const c=data.classes.find(x=>x.id===id);if(!c)return;if(!confirm('Supprimer la classe « '+c.name+' » et sa progression ? Cette action est irréversible.'))return;data.classes=data.classes.filter(x=>x.id!==id);save();renderClasses();}
-function renderLevels(){
-$('levelsClassCrumb').textContent=currentClass()?.name||'Classe';
-$('levelsList').innerHTML=data.levels.map((l,i)=>{const doneCount=data.classes.filter(c=>completed(c).includes(l.id)).length;const isInitial=INITIAL_LEVELS.some(initial=>initial.id===l.id);return '<article class="class-card"><div style="flex:1"><div class="class-name">'+esc(l.name)+' <span class="counter">· '+doneCount+'/'+data.classes.length+' classes</span></div><div class="meta">Nombres : '+l.numbers.map(esc).join(', ')+' · Cible : <strong>'+esc(l.target)+'</strong></div></div>'+(isInitial?'<span class="status">Préchargé</span>':'<button class="danger small" data-level-delete="'+l.id+'">Supprimer</button>')+'</article>';}).join('');
-$('levelsList').querySelectorAll('[data-level-delete]').forEach(b=>b.onclick=()=>deleteLevel(b.dataset.levelDelete));
-}
-function deleteLevel(id){const level=data.levels.find(l=>l.id===id);if(!level||['n1','n2','n3'].includes(id))return;if(!confirm('Supprimer '+level.name+' et son statut de validation pour toutes les classes ?'))return;data.levels=data.levels.filter(l=>l.id!==id);data.classes.forEach(c=>c.completed=(c.completed||[]).filter(x=>x!==id));save();renderLevels();renderClasses();renderGame();}
-$('classForm').addEventListener('submit',e=>{e.preventDefault();const name=$('className').value.trim();if(!name)return;if(data.classes.some(c=>c.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('Une classe porte déjà ce nom.');return;}const c={id:uid(),name,completed:[]};data.classes.push(c);save();$('className').value='';renderClasses();toast('Classe ajoutée : '+name);});
-$('revealBtn').onclick=()=>{const c=currentClass();if(!c)return;const level=data.levels[indexFor(c)];revealedCount=level.numbers.length;renderGame();};
-$('targetBtn').onclick=()=>{targetShown=true;renderGame();};
-$('resetRevealBtn').onclick=()=>{revealedCount=0;targetShown=false;renderGame();};
-$('validateBtn').onclick=()=>{const c=currentClass();if(!c)return;const idx=indexFor(c),level=data.levels[idx];if(!targetShown||!level)return;if(!c.completed.includes(level.id))c.completed.push(level.id);save();toast('Réussite enregistrée pour '+c.name+' !');if(idx<data.levels.length-1){revealedCount=0;targetShown=false;renderGame(idx+1);}else{renderGame(idx);renderClasses();toast('Bravo ! Tous les niveaux actuels sont validés.');}renderClasses();};
-function backHome(){showView('homeView');renderClasses();}
-$('backBtn').onclick=backHome;$('homeBtn').onclick=backHome;$('projectionBtn').onclick=openProjection;$('solutionsBtn').onclick=openSolutions;$('solutionsClose').onclick=closeSolutions;$('solutionsOverlay').onclick=e=>{if(e.target===$('solutionsOverlay'))closeSolutions();};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSolutions();});$('projectionExit').onclick=closeProjection;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('projectionView').classList.contains('active'))closeProjection();});document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&$('projectionView').classList.contains('active')){ $('projectionView').classList.remove('active');document.body.classList.remove('projection-open');}});
-$('manageBtn').onclick=()=>{renderLevels();showView('levelsView');};$('jumpBtn').onclick=()=>{renderLevels();showView('levelsView');};$('levelsBackBtn').onclick=()=>{showView('gameView');renderGame();};
-$('levelForm').addEventListener('submit',e=>{e.preventDefault();const name=$('newLevelName').value.trim(),numbersText=$('newLevelNumbers').value.trim(),target=Number($('newLevelTarget').value);const numbers=numbersText.split(/[,;\s]+/).filter(Boolean).map(Number);if(!name||numbers.length!==6||numbers.some(n=>!Number.isFinite(n)||n<=0||!Number.isInteger(n))||!Number.isInteger(target)||target<0){toast('Entre 6 nombres entiers positifs, puis une cible entière positive ou nulle.');return;}if(data.levels.some(l=>l.name.toLocaleLowerCase()===name.toLocaleLowerCase())){toast('Ce nom de niveau existe déjà.');return;}data.levels.push({id:uid(),name,numbers,target});save();$('levelForm').reset();renderLevels();renderClasses();renderGame();toast(name+' a été ajouté.');});
-renderClasses();
-})();
-</script>
+<header class="topbar">
+  <a class="brand" href="https://outilotheque.fr/" aria-label="Retour à Outilothèque">
+    <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+    <span class="brand-copy">
+      <span class="brand-context">OUTILOTHÈQUE · ÉDUCATION</span>
+      <span class="brand-title">Le compte est bon<span class="brand-dot">.</span></span>
+      <span class="brand-subtitle">Ateliers de calcul · suivi par classe</span>
+    </span>
+  </a>
+  <div class="header-actions">
+    <a class="hub-link" href="https://outilotheque.fr/" title="Retourner au catalogue"><span aria-hidden="true">↗</span> Outilothèque</a>
+    <button class="quiet small" id="homeBtn" hidden>← Mes classes</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== Accueil : liste des classes ===================== -->
+  <section class="view active" id="homeView">
+    <div class="eyebrow">Espace enseignant</div>
+    <h2 class="heading">Retrouvons où chaque classe en est.</h2>
+    <p class="sub">Crée tes classes une fois, puis valide les comptes réussis au fil des séances. La progression est enregistrée sur cet appareil.</p>
+
+    <div class="layout">
+      <div class="side-stack">
+        <aside class="panel">
+          <h2>Créer une classe</h2>
+          <form id="classForm">
+            <label for="className" class="helper" style="display:block;margin-bottom:8px">Nom de la classe</label>
+            <div class="field">
+              <input class="input" id="className" name="className" placeholder="Ex. CM1 A" maxlength="60" required>
+              <button class="primary" type="submit">Ajouter</button>
+            </div>
+          </form>
+          <p class="helper">Tu peux créer autant de classes que nécessaire. Chaque classe possède sa propre progression.</p>
+        </aside>
+
+        <aside class="panel">
+          <h2>Sauvegarde</h2>
+          <div class="backup-actions">
+            <button class="secondary small" id="exportBtn" type="button">⤓ Exporter</button>
+            <button class="quiet small" id="importBtn" type="button">⤒ Importer…</button>
+          </div>
+          <input type="file" id="importFile" accept="application/json,.json" class="visually-hidden" tabindex="-1" aria-hidden="true">
+          <p class="helper backup-info" id="backupInfo"></p>
+        </aside>
+      </div>
+
+      <div>
+        <div class="section-title">
+          <h2>Mes classes</h2>
+          <span class="counter" id="classCount">0 classe</span>
+        </div>
+        <div id="classList" class="class-list"></div>
+      </div>
+    </div>
+
+    <p class="footer-note">Les données restent dans le stockage local de ce navigateur. Elles ne sont pas synchronisées entre plusieurs appareils ou navigateurs : exporte régulièrement une sauvegarde (fichier .json), puis importe-la sur un autre appareil ou après un nettoyage du navigateur.</p>
+  </section>
+
+  <!-- ===================== Séance : un compte pour une classe ===================== -->
+  <section class="view" id="gameView">
+    <div class="topline">
+      <div class="crumb">
+        <button class="quiet small" id="backBtn">← Classes</button>
+        <span>/</span>
+        <strong id="activeClassCrumb">Classe</strong>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="primary small" id="projectionBtn">⛶ Mode projection</button>
+        <button class="secondary small" id="solutionsBtn">Voir les solutions</button>
+        <button class="quiet small" id="manageBtn">Gérer les niveaux</button>
+      </div>
+    </div>
+
+    <div class="eyebrow">Séance de calcul mental</div>
+    <h2 class="heading" id="gameHeading">Le compte est bon</h2>
+    <p class="sub">Affiche les nombres, puis dévoile la cible. Quand la classe a trouvé, valide pour enregistrer sa réussite et passer au suivant.</p>
+
+    <div class="game-grid">
+      <article class="game-card">
+        <div class="game-top">
+          <span class="level"><span class="level-dot"></span><span id="levelLabel">Niveau 1</span></span>
+          <span class="counter" id="levelCounter">1 / 3</span>
+        </div>
+
+        <h3 class="game-title">Les nombres disponibles</h3>
+        <p class="instruction" id="numberInstruction"></p>
+        <div class="numbers" id="numberGrid" aria-live="polite"></div>
+
+        <div class="target-box">
+          <div>
+            <div class="target-label">NOMBRE À ATTEINDRE</div>
+            <div class="target-value masked" id="targetValue">???</div>
+          </div>
+          <span aria-hidden="true" style="font-size:2rem">🎯</span>
+        </div>
+
+        <div class="progressive-actions">
+          <button class="primary" id="revealBtn">Afficher les nombres</button>
+          <button class="secondary" id="targetBtn" disabled>Afficher la cible</button>
+        </div>
+        <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+          <button id="validateBtn" class="primary" disabled>✓ Compte réussi — valider</button>
+          <button class="quiet" id="resetRevealBtn">Recommencer l’affichage</button>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <h2>Progression de la classe</h2>
+        <div class="side-stat"><span>Classe</span><strong id="sideClassName">—</strong></div>
+        <div class="side-stat"><span>Comptes validés</span><strong id="completedStat">0 / 3</strong></div>
+        <div class="side-stat"><span>À travailler ensuite</span><strong id="nextStat">Niveau 1</strong></div>
+        <div class="progress"><span id="classProgressBar" style="width:0%"></span></div>
+        <p class="helper" id="progressHelp" style="margin-top:18px"></p>
+        <div style="margin-top:18px">
+          <button class="secondary" id="jumpBtn" style="width:100%">Voir tous les niveaux</button>
+        </div>
+
+        <section class="history" aria-labelledby="historyTitle">
+          <h3 id="historyTitle">Historique</h3>
+          <ol class="history-list" id="historyList"></ol>
+          <p class="history-empty" id="historyEmpty">Aucune validation pour l’instant.</p>
+        </section>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===================== Gestion des niveaux ===================== -->
+  <section class="view" id="levelsView">
+    <div class="topline">
+      <div class="crumb">
+        <button class="quiet small" id="levelsBackBtn">← Retour au compte</button>
+        <span>/</span>
+        <strong id="levelsClassCrumb">Classe</strong>
+      </div>
+    </div>
+
+    <div class="eyebrow">Configuration</div>
+    <h2 class="heading">Les niveaux</h2>
+    <p class="sub">Les niveaux préchargés sont proposés dans l’ordre. Les niveaux que tu ajoutes se placent à la suite.</p>
+
+    <div class="panel" style="margin-bottom:20px">
+      <h2>Ajouter un niveau</h2>
+      <form id="levelForm">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+          <label>
+            <span class="helper" style="display:block;margin-bottom:7px">Nom du niveau</span>
+            <input class="input" id="newLevelName" placeholder="Niveau 37" maxlength="60" required>
+          </label>
+          <label>
+            <span class="helper" style="display:block;margin-bottom:7px">Nombres (séparés par des virgules)</span>
+            <input class="input" id="newLevelNumbers" placeholder="25, 5, 3, 1, 2, 8" required>
+          </label>
+          <label>
+            <span class="helper" style="display:block;margin-bottom:7px">Cible</span>
+            <input class="input" id="newLevelTarget" type="number" min="0" step="1" placeholder="399" required>
+          </label>
+        </div>
+        <button class="primary" type="submit" style="margin-top:14px">Ajouter ce niveau</button>
+      </form>
+    </div>
+
+    <div id="levelsList" class="class-list"></div>
+    <p class="footer-note">Les niveaux ajoutés sont disponibles pour toutes les classes. Ajouter un niveau ne valide aucune réussite : chaque classe avance indépendamment.</p>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <a href="https://outilotheque.fr/">← Retour à Outilothèque</a>
+  <span>Le compte est bon · suivi des classes</span>
+  <span>Un outil pour apprendre autrement</span>
+</footer>
+
+<!-- ===================== Mode projection ===================== -->
+<section class="projection-view" id="projectionView" aria-label="Vue de projection">
+  <button class="projection-exit quiet small" id="projectionExit">✕ Quitter la projection</button>
+  <div class="projection-timer idle" id="timerDisplay" role="timer" aria-live="off">1:00</div>
+  <div class="projection-numbers" id="projectionNumbers"></div>
+  <div class="projection-target">
+    <div class="projection-label">Nombre à atteindre</div>
+    <div class="projection-value" id="projectionTarget">???</div>
+  </div>
+
+  <div class="projection-toolbar" role="toolbar" aria-label="Commandes de projection">
+    <button class="primary small" id="projRevealBtn">Nombres</button>
+    <button class="secondary small" id="projTargetBtn">Cible</button>
+    <span class="sep" aria-hidden="true"></span>
+    <button class="primary small" id="timerToggle">▶ Lancer</button>
+    <button class="quiet small" id="timerReset">↺</button>
+    <label>Durée
+      <select id="timerDuration"></select>
+    </label>
+    <label><input type="checkbox" id="timerSound"> Son</label>
+    <div class="projection-hint">Raccourcis : N nombres · C cible · Espace minuteur · R remise à zéro · Échap quitter</div>
+  </div>
+</section>
+
+<!-- ===================== Solutions ===================== -->
+<div class="solutions-overlay" id="solutionsOverlay" role="dialog" aria-modal="true" aria-labelledby="solutionsTitle">
+  <div class="solutions-dialog">
+    <div class="solutions-head">
+      <h2 id="solutionsTitle">Solutions des niveaux préchargés</h2>
+      <button class="quiet small" id="solutionsClose">✕ Fermer</button>
+    </div>
+    <p class="helper">Chaque calcul utilise les six nombres du niveau exactement une fois.</p>
+    <div class="solutions-grid" id="solutionsGrid"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="app.js"></script>
 </body>
 </html>

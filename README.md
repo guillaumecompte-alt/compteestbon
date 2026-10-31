@@ -4,15 +4,24 @@ Petite application web pour projeter les exercices « Le compte est bon » en cl
 
 ## Contenu
 
-- `index.html` : application autonome, sans installation ni dépendance externe.
-- Trois niveaux préchargés :
-  - Niveau 1 : `25, 5, 3, 1, 2, 8` → cible `399`
-  - Niveau 2 : `50, 3, 7, 9, 8, 7` → cible `578`
-  - Niveau 3 : `25, 2, 5, 3, 10, 8` → cible `980`
-- Création, renommage et suppression de classes.
-- Affichage progressif des nombres, puis de la cible.
-- Validation manuelle d'une réussite et progression indépendante pour chaque classe.
-- Ajout de niveaux ultérieurs depuis « Gérer les niveaux ».
+| Fichier | Rôle |
+| --- | --- |
+| `index.html` | Structure de la page |
+| `styles.css` | Mise en forme |
+| `app.js` | Logique de l'application (données, séance, projection, minuteur, sauvegarde) |
+
+L'application est autonome : aucune installation, aucune dépendance externe, aucun serveur.
+
+## Fonctionnalités
+
+- 36 niveaux préchargés, proposés dans l'ordre, avec leurs solutions.
+- Création, renommage et suppression de classes ; progression indépendante pour chaque classe.
+- Affichage des six nombres, puis de la cible ; validation manuelle d'une réussite.
+- **Historique par classe** : chaque validation est datée et listée dans la page de la classe.
+- **Mode projection** plein écran avec commandes intégrées et **minuteur** (30 s à 3 min, signal sonore désactivable).
+  Raccourcis : `N` nombres · `C` cible · `Espace` lancer / mettre en pause le minuteur · `R` remise à zéro · `Échap` quitter.
+- Ajout de niveaux personnalisés depuis « Gérer les niveaux » (placés après les niveaux préchargés).
+- **Export / import** de toutes les données dans un fichier `.json`.
 
 ## Lancer en local
 
@@ -30,6 +39,32 @@ Le workflow `.github/workflows/deploy-pages.yml` déploie automatiquement le sit
 
 ## À savoir sur les données
 
-La progression est sauvegardée dans `localStorage` du navigateur et de l'appareil utilisés. Les données ne sont donc pas partagées entre ordinateurs ou navigateurs et peuvent être perdues si le stockage local est effacé. Pour une synchronisation entre appareils, il faudra ajouter une base de données et une authentification.
+Les données (classes, progression, historique, niveaux ajoutés, réglages du minuteur) sont enregistrées dans le `localStorage` du navigateur et de l'appareil utilisés. Elles ne sont pas partagées entre ordinateurs ou navigateurs et peuvent être perdues si le stockage local est effacé.
 
-Les niveaux ajoutés sont également enregistrés dans le navigateur local : ils ne sont pas automatiquement partagés avec d'autres appareils.
+Pour les sauvegarder ou les transférer, utilise le bloc **Sauvegarde** de la page d'accueil :
+
+- **Exporter** télécharge un fichier `compte-est-bon-sauvegarde-AAAA-MM-JJ.json`.
+- **Importer…** recharge un tel fichier. L'import **remplace** les données actuelles du navigateur, après confirmation. Un fichier abîmé est refusé sans rien modifier.
+
+Les données enregistrées par les versions précédentes de l'application sont migrées automatiquement au premier chargement. Si elles étaient illisibles, elles sont mises de côté sous la clé `compte-est-bon-v1-illisible` plutôt qu'écrasées.
+
+### Format des données (version 3)
+
+```json
+{
+  "schemaVersion": 3,
+  "settings": { "timerSeconds": 60, "timerSound": true, "lastExportAt": null },
+  "levels": [
+    { "id": "n1", "name": "Niveau 1", "numbers": [25, 5, 3, 1, 2, 8], "target": 399, "order": 1, "builtin": true }
+  ],
+  "classes": [
+    {
+      "id": "c-…", "name": "CM1 A",
+      "completed": ["n1"],
+      "history": [{ "levelId": "n1", "levelName": "Niveau 1", "at": "2026-10-31T17:05:00.000Z" }]
+    }
+  ]
+}
+```
+
+L'ordre des niveaux est fixé par le champ `order`, et non par l'identifiant.
